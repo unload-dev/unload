@@ -1,0 +1,4 @@
+# TODOS
+
+- Deploy a registry, delete the tag and run garbage collection
+- Setup controller server who handles the jobs

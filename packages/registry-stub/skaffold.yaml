@@ -1,0 +1,11 @@
+apiVersion: skaffold/v2beta29
+kind: Config
+metadata:
+  name: registry-stub
+
+build:
+  artifacts:
+    - image: unloaddev/registry-stub
+      platforms: ["linux/arm64"]
+      docker:
+        dockerfile: Dockerfile

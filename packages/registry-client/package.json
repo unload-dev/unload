@@ -1,0 +1,30 @@
+{
+  "name": "@unload/registry-client",
+  "version": "0.0.1",
+  "description": "A node.js client for the Docker Registry V2",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --require ./test/hooks.js ./test/**/*.test.js",
+    "lint": "npx eslint .",
+    "prettier": "npx prettier . --check",
+    "prettier:fix": "npm run prettier -- --write"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unload-dev/docker-registry-client.git"
+  },
+  "author": "Lukas Drews <ldrews@unload.dev>",
+  "license": "GNU AGPLv3",
+  "devDependencies": {
+    "@unload/registry-stub": "^0.0.1",
+    "axios-retry": "^3.3.1",
+    "chai": "^4.3.6",
+    "docker-compose": "^0.23.17",
+    "eslint": "^8.23.0",
+    "mocha": "^10.0.0",
+    "prettier": "^2.7.1"
+  },
+  "dependencies": {
+    "axios": "^1.2.2"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "@unload/cli",
+  "version": "0.0.1",
+  "description": "The cli for the unload.dev service.",
+  "main": "index.js",
+  "scripts": {},
+  "author": "Lukas Drews <ldrews@unload.dev>",
+  "license": "GNU AGPLv3",
+  "dependencies": {
+    "@unload/registry-client": "^0.0.1",
+    "docker-registry-client": "^0.0.1"
+  }
+}
