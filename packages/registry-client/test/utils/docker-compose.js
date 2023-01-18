@@ -22,6 +22,10 @@ async function runGarbageCollector() {
   await compose.exec(container, command, options);
 }
 
+async function prepare() {
+  await compose.pullAll(options);
+}
+
 async function upAll() {
   await compose.upAll(options);
 }
@@ -35,4 +39,5 @@ module.exports = {
   runGarbageCollector,
   upAll,
   down,
+  prepare,
 };

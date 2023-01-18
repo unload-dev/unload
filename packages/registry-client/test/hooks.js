@@ -21,6 +21,10 @@ axiosRetry(agent, {
   retryDelay: (count) => axiosRetry.exponentialDelay(count) * 0.1,
 });
 
+exports.mochaGlobalSetup = async function () {
+  await composeUtils.prepare();
+};
+
 exports.mochaHooks = {
   async beforeEach() {
     try {
