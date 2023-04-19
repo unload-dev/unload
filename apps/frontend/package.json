@@ -1,0 +1,21 @@
+{
+  "private": true,
+  "name": "@unload/frontend",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@nuxtjs/tailwindcss": "^6.1.3",
+    "nuxt": "^3.0.0-rc.14"
+  },
+  "dependencies": {
+    "daisyui": "^2.33.0",
+    "feather-icons": "^4.29.0",
+    "sass": "^1.55.0",
+    "vue-feather": "^2.0.0"
+  }
+}

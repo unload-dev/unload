@@ -17,12 +17,6 @@
     "inlineSourceMap": true,
     "inlineSources": true
   },
-  "include": ["**/*"],
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts",
-    "./dist/**/*",
-    "./plugins/**/*",
-    "./typings/**/*"
-  ]
+  "include": ["./src/**/*"],
+  "exclude": ["**/*.spec.ts", "**/*.test.ts"]
 }

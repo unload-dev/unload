@@ -5,7 +5,8 @@
   "description": "This repository is used to create an image of a docker registry with some images already preloaded.",
   "main": "index.js",
   "scripts": {
-    "build": "./generate_registry_data.sh && docker compose build"
+    "build": "./generate_registry_data.sh && docker compose build",
+    "start": "docker compose up"
   },
   "author": "Lukas Drews <ldrews@unload.dev>",
   "license": "GNU AGPLv3"

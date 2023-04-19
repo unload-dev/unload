@@ -1,10 +1,9 @@
 #! /usr/bin/env node
 
 import { Command } from "commander";
-const program = new Command();
 import tags from "./commands/tags";
 
-console.log(tags);
+const program = new Command();
 
 program
   .name("unload")
@@ -12,5 +11,6 @@ program
   .description("A CLI for the unload.dev services");
 
 program.addCommand(tags.makeTagsCommand());
+program.showHelpAfterError();
 
 program.parse(process.argv);
