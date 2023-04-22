@@ -13,9 +13,14 @@
     "nuxt": "^3.0.0-rc.14"
   },
   "dependencies": {
+    "@prisma/client": "^4.13.0",
     "daisyui": "^2.33.0",
     "feather-icons": "^4.29.0",
+    "prisma": "^4.13.0",
     "sass": "^1.55.0",
     "vue-feather": "^2.0.0"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   }
 }

@@ -22,7 +22,12 @@ axiosRetry(agent, {
 });
 
 exports.mochaGlobalSetup = async function () {
-  await composeUtils.prepare();
+  try {
+    await composeUtils.prepare();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
 exports.mochaHooks = {
