@@ -3,23 +3,8 @@ definePageMeta({
   title: "Registries",
 });
 
-// const route = useRoute();
-// const addLink = [route.fullPath, "connect"].join("/");
-
-const values = [
-  "Docker Hub",
-  "DigitalOcean",
-  "Harbor",
-  "Acme Inc.",
-  "Azure",
-  "GitHub",
-].map((value) => {
-  return {
-    name: value,
-    type: "DockerV2",
-    repositories: value.length,
-  };
-});
+const values = ref([]);
+$fetch("/api/registries").then((data) => (values.value = data));
 </script>
 
 <template>
@@ -41,7 +26,6 @@ const values = [
           <NuxtLink class="btn btn-primary" :to="{ name: 'connect-registry' }">
             Connect
           </NuxtLink>
-          <!-- <button class="btn btn-primary">Connect</button> -->
         </BaseCard>
         <div
           class="col-span-1 row-span-2 bg-base-200 rounded-box grid place-items-center"

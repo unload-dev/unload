@@ -10,17 +10,15 @@ definePageMeta({
     <form
       class="flex form-control mx-auto w-full max-w-md gap-4 items-center justify-items-center justify-center center"
     >
+      <input type="text" placeholder="Name" class="input w-full max-w-md" />
       <input
         type="text"
-        placeholder="Type here"
+        placeholder="Registry URL"
         class="input w-full max-w-md"
       />
-
-      <input
-        type="text"
-        placeholder="Type here"
-        class="input w-full max-w-md"
-      />
+      <input type="text" placeholder="Username" class="input w-full max-w-md" />
+      <input type="text" placeholder="Password" class="input w-full max-w-md" />
+      <BaseButton class="btn-primary place-self-end">Create</BaseButton>
     </form>
   </div>
 </template>
