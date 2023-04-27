@@ -10,27 +10,66 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id         Int        @id @default(autoincrement())
-  email      String     @unique
-  name       String
-  registries Registry[]
-}
-
 model Registry {
-  id            Int                 @id @default(autoincrement())
+  id            String              @id @default(cuid())
   title         String
   type          String //TODO make this to an enum
   url           String
   credentials   RegistryCredentials @relation(fields: [credentialsId], references: [id])
-  credentialsId Int                 @unique
+  credentialsId String              @unique
   User          User                @relation(fields: [userId], references: [id])
-  userId        Int
+  userId        String
 }
 
 model RegistryCredentials {
-  id       Int       @id @default(autoincrement())
+  id       String    @id @default(cuid())
   username String
   password String
   Registry Registry?
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String     @id @default(cuid())
+  name          String?
+  email         String?    @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  registries    Registry[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }
