@@ -1,10 +1,10 @@
-<script setup>
+<script setup lang="ts">
 definePageMeta({
   title: "Registries",
 });
 
-const values = ref([]);
-$fetch("/api/registries").then((data) => (values.value = data));
+const { $client } = useNuxtApp();
+const registries = await $client.registry.getAll.useQuery();
 </script>
 
 <template>
@@ -32,7 +32,7 @@ $fetch("/api/registries").then((data) => (values.value = data));
         >
           <p>Stats coming soon!</p>
         </div>
-        <BaseTable class="col-span-2 row-span-1" :values="values" />
+        <BaseTable class="col-span-2 row-span-1" :values="registries.data" />
       </div>
     </div>
   </div>
