@@ -4,7 +4,7 @@ definePageMeta({
 });
 
 const { $client } = useNuxtApp();
-const registries = await $client.registry.getAll.useQuery();
+const { data: registries } = await $client.registry.getAll.useQuery();
 </script>
 
 <template>
@@ -32,7 +32,7 @@ const registries = await $client.registry.getAll.useQuery();
         >
           <p>Stats coming soon!</p>
         </div>
-        <BaseTable class="col-span-2 row-span-1" :values="registries.data" />
+        <BaseTable class="col-span-2 row-span-1" :values="registries" />
       </div>
     </div>
   </div>

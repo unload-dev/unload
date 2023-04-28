@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { publicProcedure, router } from "../trpc";
+import { protectedProcedure, router } from "../trpc";
 import RegistryClient from "@unload/registry-client";
 
 const options = {
@@ -13,7 +13,7 @@ const options = {
 };
 
 export const registryRouter = router({
-  getAll: publicProcedure.query(async ({ ctx }) => {
+  getAll: protectedProcedure.query(async ({ ctx }) => {
     const registries = await ctx.prisma.registry.findMany();
     const values = registries.map((reg) => {
       return {
