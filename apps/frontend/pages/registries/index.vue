@@ -15,7 +15,7 @@ const { data: registries } = await $client.registry.getAll.useQuery();
       >
         <BaseCard
           class="col-span-1 row-span-1"
-          title="Manage your repositories"
+          title="Manage your registries"
           description="Seamlessly manage your container images by connecting your registry and taking control of your repositories."
         />
         <BaseCard
@@ -23,7 +23,7 @@ const { data: registries } = await $client.registry.getAll.useQuery();
           title="Connect a registry"
           description="Connect a remote registry to your project."
         >
-          <NuxtLink class="btn btn-primary" :to="{ name: 'connect-registry' }">
+          <NuxtLink class="btn btn-primary" :to="{ name: 'registry-connect' }">
             Connect
           </NuxtLink>
         </BaseCard>

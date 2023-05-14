@@ -1,64 +1,26 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-async function main() {
-  const alice = await prisma.user.upsert({
-    where: { email: "alice@prisma.io" },
-    update: {},
-    create: {
-      email: "alice@prisma.io",
-      name: "Alice",
 
-      registries: {
-        create: {
-          title: "My private registry",
-          type: "Digital Ocean ",
-          url: "https://registry.digitalocean/alice",
-          credentials: {
-            create: {
-              username: "alice",
-              password: "password",
-            },
-          },
-        },
-      },
-    },
-  });
-  const bob = await prisma.user.upsert({
-    where: { email: "bob@prisma.io" },
+function upsertRegistryType(name: string) {
+  return prisma.registryType.upsert({
+    where: { name },
     update: {},
     create: {
-      email: "bob@prisma.io",
-      name: "Bob",
-      registries: {
-        create: [
-          {
-            title: "ACME corp.",
-            type: "Docker Hub",
-            url: "https://docker.hub.com/unloaddev",
-            credentials: {
-              create: {
-                username: "bob",
-                password: "password",
-              },
-            },
-          },
-          {
-            title: "Pied Piper Registry",
-            type: "Github",
-            url: "https://gcr.io/registry12345",
-            credentials: {
-              create: {
-                username: "bob-business",
-                password: "business-password",
-              },
-            },
-          },
-        ],
-      },
+      name,
     },
   });
-  console.log({ alice, bob });
 }
+
+async function main() {
+  const registryTypes = ["GitHub", "DigitalOcean", "Docker Registry"];
+
+  for (const registryType of registryTypes) {
+    await upsertRegistryType(registryType);
+  }
+
+  console.log("Registry types:", registryTypes);
+}
+
 main()
   .then(async () => {
     await prisma.$disconnect();

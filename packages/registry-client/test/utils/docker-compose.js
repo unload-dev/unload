@@ -23,7 +23,8 @@ async function runGarbageCollector() {
 }
 
 async function prepare() {
-  await compose.pullAll(options);
+  // TODO this should build the registry from scratch if not found locally
+  // await compose.pullAll(options);
 }
 
 async function upAll() {

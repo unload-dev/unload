@@ -11,14 +11,16 @@ datasource db {
 }
 
 model Registry {
-  id            String              @id @default(cuid())
-  title         String
-  type          String //TODO make this to an enum
-  url           String
-  credentials   RegistryCredentials @relation(fields: [credentialsId], references: [id])
-  credentialsId String              @unique
-  User          User                @relation(fields: [userId], references: [id])
-  userId        String
+  id             String              @id @default(cuid())
+  name           String              @unique
+  url            String
+  skipTlsVerify  Boolean             @default(false)
+  type           RegistryType        @relation(fields: [registryTypeId], references: [id])
+  registryTypeId String
+  credentials    RegistryCredentials @relation(fields: [credentialsId], references: [id])
+  credentialsId  String              @unique
+  user           User                @relation(fields: [userId], references: [id])
+  userId         String
 }
 
 model RegistryCredentials {
@@ -26,6 +28,13 @@ model RegistryCredentials {
   username String
   password String
   Registry Registry?
+}
+
+model RegistryType {
+  id   String @id @default(cuid())
+  name String @unique
+
+  Registry Registry[]
 }
 
 model Account {

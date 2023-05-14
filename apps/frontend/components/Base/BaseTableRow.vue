@@ -5,6 +5,12 @@ defineProps({
     required: true,
   },
 });
+
+const { $client } = useNuxtApp();
+
+async function deleteRegistry(name) {
+  await $client.registry.delete.mutate({ name });
+}
 </script>
 
 <template>
@@ -22,7 +28,9 @@ defineProps({
           class="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-52"
         >
           <li><a>Edit</a></li>
-          <li class="text-error"><a>Delete</a></li>
+          <li class="text-error" @click="deleteRegistry(value.name)">
+            <a>Delete</a>
+          </li>
         </ul>
       </div>
     </td>
