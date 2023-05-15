@@ -4,6 +4,11 @@
 
 ```shell
 npm install
-npx lerna run test
-# npx lerna run dev
+cp .env.example .env
+```
+
+Replace the values in `.env` with your own values. After thate run:
+
+```shell
+npx lerna run dev
 ```

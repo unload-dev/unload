@@ -22,7 +22,8 @@ defineProps({
       </tr>
     </thead>
 
-    <tbody v-if="values.length">
+    <!-- The table is loading as long as vlaue is undefined -->
+    <tbody v-if="values?.length">
       <BaseTableRow v-for="value in values" :key="value.name" :value="value" />
     </tbody>
     <tbody v-else>

@@ -2,9 +2,11 @@
 definePageMeta({
   title: "Registries",
 });
+import { useRegistryStore } from "~/store/registryStore";
+import { storeToRefs } from "pinia";
 
-const { $client } = useNuxtApp();
-const { data: registries } = await $client.registry.getAll.useQuery();
+const store = useRegistryStore();
+const { registries } = storeToRefs(store);
 </script>
 
 <template>
