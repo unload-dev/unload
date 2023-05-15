@@ -5,12 +5,8 @@ defineProps({
     required: true,
   },
 });
-
-const { $client } = useNuxtApp();
-
-async function deleteRegistry(name) {
-  await $client.registry.delete.mutate({ name });
-}
+import { useRegistryStore } from "~/store/registryStore";
+const registryStore = useRegistryStore();
 </script>
 
 <template>
@@ -28,7 +24,7 @@ async function deleteRegistry(name) {
           class="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-52"
         >
           <li><a>Edit</a></li>
-          <li class="text-error" @click="deleteRegistry(value.name)">
+          <li class="text-error" @click="registryStore.remove(value.name)">
             <a>Delete</a>
           </li>
         </ul>

@@ -2,16 +2,15 @@
 definePageMeta({
   name: "registry-connect",
 });
-const { $client } = useNuxtApp();
-
-const registryTypes = await $client.registry.getTypes.query();
+import { useRegistryStore } from "~/store/registryStore";
+const registryStore = useRegistryStore();
 
 const formData = reactive({
   registry: {
     name: "",
     url: "",
     skipTlsVerify: false,
-    type: registryTypes[0].id,
+    type: registryStore.types?.[0].id,
   },
   credentials: {
     username: "",
@@ -21,7 +20,7 @@ const formData = reactive({
 
 async function handleSubmit() {
   try {
-    await $client.registry.add.mutate(formData);
+    await registryStore.add(formData);
 
     // TODO navigate to created registry
     await navigateTo({ name: "registries" });
@@ -48,7 +47,7 @@ async function handleSubmit() {
 
       <select class="select" v-model="formData.registry.type">
         <option
-          v-for="registryType in registryTypes"
+          v-for="registryType in registryStore.types"
           :key="registryType.id"
           :value="registryType.id"
         >
