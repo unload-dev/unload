@@ -1,6 +1,6 @@
 import { NuxtAuthHandler } from "#auth";
-import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
@@ -18,6 +18,7 @@ declare module "next-auth" {
 }
 
 export default NuxtAuthHandler({
+  secret: process.env.AUTH_SECRET,
   //   pages: {
   //     // Change the default behavior to use `/login` as the path for the sign-in page
   //     signIn: "/login",
@@ -28,6 +29,11 @@ export default NuxtAuthHandler({
     GithubProvider.default({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
+    }),
+    // @ts-expect-error You need to use .default here for it to work during SSR. May be fixed via Vite at some point
+    GoogleProvider.default({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
   callbacks: {
