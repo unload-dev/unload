@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build Docker Image and Depoy to Koyeb
 
 on:
   push:
@@ -30,3 +30,11 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_HUB_USERNAME }}/unload-app:${{ github.sha }}
             ${{ secrets.DOCKER_HUB_USERNAME }}/unload-app:edge
+
+      - name: Install and configure the Koyeb CLI
+        uses: koyeb-community/install-koyeb-cli@v2
+        with:
+          api_token: "${{ secrets.KOYEB_TOKEN }}"
+          github_token: "${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}"
+      - name: Deploy to Koyeb
+        run: koyeb service update app/unload-app --docker ${{ secrets.DOCKER_HUB_USERNAME }}/unload-app:${{ github.sha }}
