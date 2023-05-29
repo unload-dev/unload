@@ -18,7 +18,7 @@ declare module "next-auth" {
 }
 
 export default NuxtAuthHandler({
-  debug: true,
+  debug: false,
   secret: process.env.AUTH_SECRET,
   //   pages: {
   //     // Change the default behavior to use `/login` as the path for the sign-in page
