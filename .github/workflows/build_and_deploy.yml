@@ -6,7 +6,7 @@ on:
       - develop
 
 jobs:
-  docker:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -31,6 +31,10 @@ jobs:
             ${{ secrets.DOCKER_HUB_USERNAME }}/unload-app:${{ github.sha }}
             ${{ secrets.DOCKER_HUB_USERNAME }}/unload-app:edge
 
+  debloy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       - name: Install and configure the Koyeb CLI
         uses: koyeb-community/install-koyeb-cli@v2
         with:
