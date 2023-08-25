@@ -17,4 +17,14 @@ export default defineNuxtConfig({
     //   mode: "out-in", // default
     // },
   },
+  __dangerouslyDisableSanitizers: ["script"],
+  script: [
+    {
+      hid: "MONITORING_SCRIPT",
+      src: "/monitoring.js",
+      defer: true,
+      type: "text/javascript",
+      charset: "utf-8",
+    },
+  ],
 });
