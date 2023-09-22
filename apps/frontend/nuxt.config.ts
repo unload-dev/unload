@@ -16,5 +16,14 @@ export default defineNuxtConfig({
     //   name: "fade",
     //   mode: "out-in", // default
     // },
+    head: {
+      script: [
+        {
+          src: `/monitoring-${process.env.NODE_ENV}.js`,
+          defer: true,
+          type: "text/javascript",
+        }
+      ]
+    }
   },
 });

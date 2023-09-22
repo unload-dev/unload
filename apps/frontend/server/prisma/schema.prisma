@@ -13,7 +13,7 @@ datasource db {
 
 model Registry {
   id             String              @id @default(cuid())
-  name           String              @unique
+  name           String
   url            String
   skipTlsVerify  Boolean             @default(false)
   type           RegistryType        @relation(fields: [registryTypeId], references: [id])
@@ -22,6 +22,10 @@ model Registry {
   credentialsId  String              @unique
   user           User                @relation(fields: [userId], references: [id])
   userId         String
+
+  @@unique([name, userId])
+  @@index([registryTypeId]) // https://github.com/prisma/prisma/issues/10611
+  @@index([userId]) // https://github.com/prisma/prisma/issues/10611
 }
 
 model RegistryCredentials {
@@ -44,17 +48,18 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String?
-  access_token      String?
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String?
+  id_token          String? @db.Text
   session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId]) // https://github.com/prisma/prisma/issues/10611
 }
 
 model Session {
@@ -63,6 +68,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId]) // https://github.com/prisma/prisma/issues/10611
 }
 
 model User {
