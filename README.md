@@ -1,5 +1,9 @@
 # Unload
 
+## Notice
+
+We have to pin `next-auth` to version 4.21.1 in the frontend.
+
 ## Getting started
 
 ```shell

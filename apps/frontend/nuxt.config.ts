@@ -17,13 +17,16 @@ export default defineNuxtConfig({
     //   mode: "out-in", // default
     // },
     head: {
-      script: [
-        {
-          src: `/monitoring-${process.env.NODE_ENV}.js`,
-          defer: true,
-          type: "text/javascript",
-        }
-      ]
-    }
+      script:
+        process.env.NODE_ENV === "production"
+          ? [
+              {
+                src: `/monitoring-${process.env.NODE_ENV}.js`,
+                defer: true,
+                type: "text/javascript",
+              },
+            ]
+          : [],
+    },
   },
 });
