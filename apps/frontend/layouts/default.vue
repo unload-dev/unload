@@ -2,9 +2,9 @@
   <div class="flex w-screen h-screen bg-base-300 gap-6 p-6">
     <AppSidebar class="h-full" />
 
-    <div class="w-full flex flex-col gap-6">
+    <div class="w-full h-full flex flex-col gap-6">
       <AppHeader />
-      <div class="flex-grow">
+      <div class="h-full flex-grow">
         <slot />
       </div>
     </div>

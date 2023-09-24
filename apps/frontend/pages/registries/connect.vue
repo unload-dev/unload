@@ -1,93 +1,92 @@
 <script setup>
+import { toTypedSchema } from "@vee-validate/zod";
+import { z } from "zod";
+
 definePageMeta({
   name: "registry-connect",
 });
 import { useRegistryStore } from "~/store/registryStore";
 const registryStore = useRegistryStore();
 
-const formData = reactive({
-  registry: {
-    name: "",
-    url: "",
-    skipTlsVerify: false,
-    type: registryStore.types?.[0].id,
+const { handleSubmit } = useForm({
+  initialValues: {
+    registry: {
+      name: "",
+      type: registryStore.types?.[0].id,
+      url: "",
+      skipTlsVerify: false,
+    },
+    credentials: {
+      username: "",
+      password: "",
+    },
   },
-  credentials: {
-    username: "",
-    password: "",
-  },
+  validationSchema: toTypedSchema(
+    z.object({
+      registry: z.object({
+        name: z.string().min(1, "Required"),
+        type: z.string(),
+        url: z.string().min(1, "Required"),
+        skipTlsVerify: z.boolean(),
+      }),
+      credentials: z.object({
+        username: z.string().min(1, "Required"),
+        password: z.string().min(1, "Required"),
+      }),
+    })
+  ),
 });
 
-async function handleSubmit() {
+async function addRegistry(values) {
   try {
-    await registryStore.add(formData);
-
-    // TODO navigate to created registry
+    await registryStore.add(values);
     await navigateTo({ name: "registries" });
   } catch (error) {
     console.error(error);
   }
 }
+
+const onSubmit = handleSubmit(async (values) => {
+  await addRegistry(values);
+});
 </script>
 
 <template>
   <div class="rounded-box bg-base-200 h-full p-6">
+    <span class="loading loading-spinner loading-md"></span>
     <NuxtLink :to="{ name: 'registries' }">&LeftArrow; Back</NuxtLink>
+
     <form
-      class="flex form-control gap-4 max-w-md w-full mx-auto"
-      @submit.prevent="handleSubmit"
+      @submit.prevent="onSubmit"
+      class="flex fley-grow h-full form-control max-w-md w-full mx-auto"
     >
       <h2>Connect your registry</h2>
-      <input
-        type="text"
-        placeholder="Name"
-        class="input"
-        v-model="formData.registry.name"
+      <FormInputField type="text" placeholder="Name" name="registry.name" />
+      <FormSelectField
+        title="Select a registry provider"
+        :data="registryStore.types"
+        name="registry.type"
       />
+      <FormInputField type="text" placeholder="Registry" name="registry.url" />
+      <FormToggleButton name="registry.skipTlsVerify" />
 
-      <select class="select" v-model="formData.registry.type">
-        <option
-          v-for="registryType in registryStore.types"
-          :key="registryType.id"
-          :value="registryType.id"
-        >
-          {{ registryType.name }}
-        </option>
-      </select>
-
-      <input
-        type="text"
-        placeholder="Registry URL"
-        class="input"
-        v-model="formData.registry.url"
-      />
-
-      <label class="cursor-pointer label w-52">
-        <input
-          type="checkbox"
-          class="toggle toggle-primary"
-          v-model="formData.registry.skipTlsVerify"
-        />
-        <span class="label-text">Skip TLS verification</span>
-      </label>
-
-      <h3>Registry credentials</h3>
-      <input
+      <h3 class="mt-6">Registry credentials</h3>
+      <FormInputField
         type="text"
         placeholder="Username"
-        class="input"
-        v-model="formData.credentials.username"
+        name="credentials.username"
       />
-      <input
+      <FormInputField
         type="password"
         placeholder="Password"
-        class="input"
-        v-model="formData.credentials.password"
+        name="credentials.password"
       />
 
-      <BaseButton type="submit" class="btn-primary place-self-end"
-        >Create</BaseButton
-      >
+      <BaseButton type="submit" class="btn-primary place-self-end">
+        Create
+      </BaseButton>
+      <span class="loading loading-spinner loading-xs"></span>
+      <span class="loading loading-spinner loading-md"></span>
     </form>
   </div>
 </template>
