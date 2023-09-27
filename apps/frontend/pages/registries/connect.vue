@@ -26,12 +26,12 @@ const { handleSubmit } = useForm({
       registry: z.object({
         name: z.string().min(1, "Required"),
         type: z.string(),
-        url: z.string().min(1, "Required"),
+        url: z.string().url("Please enter a valid url"),
         skipTlsVerify: z.boolean(),
       }),
       credentials: z.object({
-        username: z.string().min(1, "Required"),
-        password: z.string().min(1, "Required"),
+        username: z.string(),
+        password: z.string(),
       }),
     })
   ),
