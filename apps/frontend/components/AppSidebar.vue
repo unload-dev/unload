@@ -1,7 +1,8 @@
 <template>
-  <div class="flex flex-col flex-shrink-0 w-64">
+  <div
+    class="sticky top-0 hidden h-screen w-48 flex-none flex-col border-r border-gray-100 dark:border-gray-900 px-3 pt-5 pb-4 md:flex lg:w-60"
+  >
     <AppSidebarHeader />
-    <AppSidebarDivider />
 
     <AppSidebarMenu class="flex-grow" />
 

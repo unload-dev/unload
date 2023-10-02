@@ -1,17 +1,29 @@
 <template>
-  <div class="flex w-screen h-screen bg-base-300 gap-6 p-6">
-    <AppSidebar class="h-full" />
+  <div
+    class="flex min-w-screen min-h-screen bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+  >
+    <AppSidebar />
 
-    <div class="w-full h-full flex flex-col gap-6">
-      <AppHeader />
-      <div class="h-full flex-grow">
-        <slot />
-      </div>
-    </div>
+    <UContainer
+      :ui="{
+        base: 'w-full',
+        padding: 'sm:py-6 lg:px-8',
+      }"
+    >
+      <slot />
+    </UContainer>
   </div>
 </template>
 
 <style>
+body {
+  background-color: aliceblue;
+  color: rgba(0, 0, 0, 1);
+}
+.dark-mode body {
+  background-color: #091a28;
+  color: #ebf4f1;
+}
 .fade-enter-active,
 .fade-leave-active {
   transition: all 50ms;

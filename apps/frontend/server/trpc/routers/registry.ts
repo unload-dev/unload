@@ -1,8 +1,15 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
+import { Registry as PrismaRegistry } from "@prisma/client";
+
+interface Registry {
+  name: string;
+  type: string;
+  repositories: number;
+}
 
 export const registryRouter = router({
-  getAll: protectedProcedure.query(async ({ ctx }) => {
+  getAll: protectedProcedure.query(async ({ ctx }): Promise<Registry[]> => {
     const registries = await ctx.prisma.registry.findMany({
       where: { userId: ctx.session.user.id },
       include: {
@@ -10,7 +17,7 @@ export const registryRouter = router({
       },
     });
 
-    const values = registries.map((reg) => {
+    const values = registries.map((reg: PrismaRegistry) => {
       return {
         name: reg.name,
         type: reg.type.name,

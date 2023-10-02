@@ -1,38 +1,37 @@
 <script setup>
-const items = [
+const links = [
   {
-    title: "Dashboard",
-    path: "/",
-    icon: "home",
+    label: "Dashboard",
+    icon: "i-heroicons-home-solid",
+    to: "/",
   },
   {
-    title: "Registries",
-    path: "/registries",
-    icon: "truck",
+    label: "Registries",
+    icon: "i-heroicons-square-3-stack-3d-solid",
+    to: "/registries",
   },
   {
-    title: "Repositories",
-    path: "/repositories",
-    icon: "archive",
+    label: "Repositories",
+    icon: "i-heroicons-cube-solid",
+    to: "/repositories",
   },
-  {
-    title: "Jobs",
-    path: "/jobs",
-    disabled: true,
-    icon: "clock",
-  },
+  // {
+  //   label: "Jobs",
+  //   icon: "i-heroicons-clock",
+  //   to: "/jobs",
+  // },
 ];
 </script>
 
 <template>
-  <ul class="menu h-full py-6 bg-base-200">
-    <AppSidebarMenuItem
-      v-for="item in items"
-      :key="item.title"
-      :title="item.title"
-      :path="item.path"
-      :disabled="item.disabled"
-      :icon="item.icon"
-    />
-  </ul>
+  <UVerticalNavigation
+    :links="links"
+    :ui="{
+      size: 'text-sm',
+      icon: {
+        base: 'h-[18px] w-[18px]',
+        active: 'text-primary dark:text-primary',
+      },
+    }"
+  />
 </template>

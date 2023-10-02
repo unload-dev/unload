@@ -1,14 +1,16 @@
+<script setup>
+const { metaSymbol } = useShortcuts();
+</script>
+
 <template>
-  <div
-    class="bg-base-200 flex flex-row justify-center items-center py-4 rounded-t-box"
-  >
+  <div class="flex flex-row justify-center items-center py-4 rounded-t-box">
     <div class="avatar">
       <div class="w-12 rounded">
         <svg
           viewBox="0 0 500 500"
           version="1.1"
           id="svg86"
-          class="fill-base-content"
+          class="fill-gray-900 dark:fill-gray-100"
           sodipodi:docname="unload-logo.svg"
           inkscape:export-filename="unload-logo-white.png"
           inkscape:export-xdpi="96"
@@ -38,10 +40,9 @@
         </svg>
       </div>
     </div>
-    <div class="font-bold text-base-content pr-4">Project Alpha</div>
-    <div>
-      <kbd class="kbd kbd-sm bg-base-100">⌘</kbd>
-      <kbd class="kbd kbd-sm bg-base-100">H</kbd>
+    <div class="font-bold pr-4">Project Alpha</div>
+    <div class="flex items-center gap-0.5">
+      <UKbd>{{ metaSymbol }}</UKbd> <UKbd>K</UKbd>
     </div>
   </div>
 </template>

@@ -4,11 +4,10 @@ FROM node:18-alpine as builder
 WORKDIR /workspace
 
 # Copy package files
-COPY package.json ./
-COPY yarn.lock ./
+COPY package*.json ./
 
 # Install dependencies
-RUN yarn install
+RUN npm ci
 
 # Copy the entire workspace into the Docker image
 
@@ -17,8 +16,9 @@ COPY . .
 # Set the working directory in the container
 WORKDIR /workspace/apps/frontend
 
+RUN npm ci
 RUN npx prisma generate
-RUN yarn build
+RUN npm run build
 
 FROM node:18-alpine as runner
 
