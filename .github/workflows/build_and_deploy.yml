@@ -3,7 +3,7 @@ name: Build Docker Image and Depoy to Koyeb
 on:
   push:
     branches:
-      - develop
+      - main
 
 jobs:
   build:
