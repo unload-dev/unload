@@ -6,10 +6,8 @@ const options = {
   https: true,
   insecure: false,
   auth: {
-    username:
-      "dop_v1_d8784884f1d9330706dfbc807fb55c47a44e5f27ab6d9d8ca291952e2b0b2c5b",
-    password:
-      "dop_v1_d8784884f1d9330706dfbc807fb55c47a44e5f27ab6d9d8ca291952e2b0b2c5b",
+    username: "admin",
+    password: "admin",
   },
 };
 
