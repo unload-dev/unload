@@ -1,10 +1,15 @@
 {
   "name": "@unload/registry-client",
   "version": "0.0.1",
-  "description": "A node.js client for the Docker Registry V2",
-  "main": "index.js",
+  "description": "A node.js client for various Docker Registries",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
   "scripts": {
-    "test": "mocha --require ./test/hooks.js ./test/**/*.test.js",
+    "build": "rimraf dist/ && tsc",
+    "test": "vitest",
     "lint": "npx eslint .",
     "prettier": "npx prettier . --check",
     "prettier:fix": "npm run prettier -- --write"
@@ -16,13 +21,17 @@
   "author": "Lukas Drews <ldrews@unload.dev>",
   "license": "GNU AGPLv3",
   "devDependencies": {
+    "@types/node": "^20.8.2",
     "@unload/registry-stub": "^0.0.1",
     "axios-retry": "^3.3.1",
-    "chai": "^4.3.6",
     "docker-compose": "^0.23.17",
+    "dotenv": "^16.3.1",
     "eslint": "^8.23.0",
-    "mocha": "^10.0.0",
-    "prettier": "^2.7.1"
+    "prettier": "^2.7.1",
+    "rimraf": "^5.0.5",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.6"
   },
   "dependencies": {
     "axios": "^1.2.2"

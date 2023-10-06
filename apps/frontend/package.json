@@ -32,8 +32,6 @@
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} server/prisma/seed.ts"
   },
   "devDependencies": {
-    "@nuxtjs/eslint-module": "^4.1.0",
-    "eslint": "^8.50.0",
     "prettier": "^3.0.3"
   }
 }
