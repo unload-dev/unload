@@ -9,9 +9,10 @@ export class DigitalOcean implements RegistryProvider {
   private readonly https: boolean = true;
   private readonly skipTlsVerify: boolean = false;
 
+  public registryName: string;
   private apiClient: Axios;
 
-  constructor(token: string) {
+  constructor(registryName: string, token: string) {
     if (
       !token.startsWith("dop_v1_") &&
       !token.startsWith("doo_v1_") &&
@@ -21,6 +22,9 @@ export class DigitalOcean implements RegistryProvider {
         "Invalid token. Token should start with 'dop_v1_', 'dop_v1_' or 'dor_v1_'"
       );
     }
+
+    this.registryName = registryName;
+
     const scheme = this.https ? "https" : "http";
     const headers = { Authorization: `Bearer ${token}` };
 
@@ -61,8 +65,27 @@ export class DigitalOcean implements RegistryProvider {
     }
   }
 
+  async getRepositories(): Promise<string[]> {
+    const { data } = await this.sendRequest({
+      url: `/v2/registry/${this.registryName}/repositoriesV2`,
+    });
+
+    const repositories = data.repositories.map((repo) => repo.name);
+    return repositories;
+  }
+
   async getTags(repository: string): Promise<string[]> {
-    return [""];
+    const escapedRepositoryName = encodeURIComponent(repository);
+
+    const { data } = await this.sendRequest({
+      url: `/v2/registry/${this.registryName}/repositories/${escapedRepositoryName}/tags`,
+    });
+
+    console.log(data);
+
+    const tags = data.tags.map((tag) => tag.tag);
+
+    return tags;
   }
 
   async getTag(repository: string, tag: string): Promise<string> {
