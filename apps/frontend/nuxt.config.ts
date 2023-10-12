@@ -1,11 +1,6 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
-  modules: [
-    "@nuxtjs/eslint-module",
-    "@nuxt/ui",
-    "@sidebase/nuxt-auth",
-    "@pinia/nuxt",
-  ],
+  modules: ["@sidebase/nuxt-auth", "@pinia/nuxt", "@nuxt/ui", "@vueuse/nuxt"],
   auth: {
     enableGlobalAppMiddleware: true,
   },
