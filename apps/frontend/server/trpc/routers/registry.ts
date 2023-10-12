@@ -1,12 +1,7 @@
+import { Registry } from "./types";
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { Registry as PrismaRegistry } from "@prisma/client";
-
-interface Registry {
-  name: string;
-  type: string;
-  repositories: number;
-}
 
 export const registryRouter = router({
   getAll: protectedProcedure.query(async ({ ctx }): Promise<Registry[]> => {
@@ -32,6 +27,7 @@ export const registryRouter = router({
       z.object({
         registry: z.object({
           name: z.string(),
+          namespace: z.string(),
           url: z.string(),
           skipTlsVerify: z.boolean().default(false),
           type: z.string(),
@@ -39,6 +35,7 @@ export const registryRouter = router({
         credentials: z.object({
           username: z.string(),
           password: z.string(),
+          token: z.string(),
         }),
       })
     )

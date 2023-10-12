@@ -57,7 +57,7 @@ const columns = [
       }"
       :empty-state="{
         icon: 'i-heroicons-circle-stack-20-solid',
-        label: 'No items.',
+        label: 'No registries.',
       }"
     >
       <template #actions-data="{ row }">
