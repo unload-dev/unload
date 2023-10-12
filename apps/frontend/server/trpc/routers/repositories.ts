@@ -1,40 +1,38 @@
+import { Repository } from "./types";
+
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
-import RegistryClient from "@unload/registry-client";
+import {
+  RegistryClient,
+  Provider,
+  RegistryOptions,
+} from "@unload/registry-client";
 
-const options = {
-  registry: "localhost:5001",
-  https: true,
-  insecure: true,
-  auth: {
-    username: "testuser",
-    password: "testpassword",
-  },
-};
+export const repositoryRouter = router({
+  getAll: protectedProcedure.query(async ({ ctx }): Promise<Repository[]> => {
+    const registries = await ctx.prisma.registry.findMany({
+      where: { userId: ctx.session.user.id },
+      include: {
+        type: true,
+        credentials: true,
+      },
+    });
 
-export const registryRouter = router({
-  getByName: protectedProcedure
-    .input(
-      z.object({
-        name: z.string(),
-      })
-    )
-    .query(async ({ ctx }) => {
-      const registries = await ctx.prisma.registry.findMany({
-        where: { userId: ctx.session.user.id },
-        include: {
-          type: true,
-        },
-      });
+    const reg = registries.filter((r) => r.name === "Unload - Production")[0];
+    const options: RegistryOptions = {
+      name: reg.namespace as string,
+      token: reg.credentials.token as string,
+    };
+    const provider = RegistryClient.create(Provider.digitalOcean, options);
+    const repositories = await provider.getRepositories();
 
-      const values = registries.map((reg) => {
-        return {
-          name: reg.name,
-          type: reg.type.name,
-          repositories: reg.name.length,
-        };
-      });
+    const result = repositories.map((repo): Repository => {
+      return {
+        ...repo,
+        registry: reg.name,
+      };
+    });
 
-      return values;
-    }),
+    return result;
+  }),
 });
