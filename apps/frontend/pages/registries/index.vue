@@ -4,18 +4,23 @@ definePageMeta({
 });
 import { useRegistryStore } from "~/store/registryStore";
 import { storeToRefs } from "pinia";
+import { Registry } from "~/server/trpc/routers/types";
 
 const store = useRegistryStore();
-const { registries } = storeToRefs(store);
+const { registries, isLoading } = storeToRefs(store);
 
-const items = (row) => [
+const items = (row: Registry) => [
   [
     {
       label: "Edit",
       icon: "i-heroicons-pencil-square-20-solid",
-      click: () => console.log("Edit", row.id),
+      disabled: true,
     },
-    { label: "Delete", icon: "i-heroicons-trash-20-solid" },
+    {
+      label: "Delete",
+      icon: "i-heroicons-trash-20-solid",
+      click: () => store.remove(row.id),
+    },
   ],
 ];
 
@@ -31,6 +36,10 @@ const columns = [
   {
     key: "repositories",
     label: "Repositories",
+  },
+  {
+    key: "connected",
+    label: "Status",
   },
   { key: "actions", class: "w-12" },
 ];
@@ -55,11 +64,24 @@ const columns = [
       :ui="{
         wrapper: 'border rounded-md border-gray-200 dark:border-gray-700',
       }"
+      :loading="isLoading"
+      :loading-state="{
+        icon: 'i-heroicons-arrow-path-20-solid',
+        label: 'Loading...',
+      }"
       :empty-state="{
         icon: 'i-heroicons-circle-stack-20-solid',
-        label: 'No items.',
+        label: 'No registries.',
       }"
     >
+      <template #connected-data="{ row }">
+        <template v-if="row.connected">
+          <UBadge color="green" variant="outline" label="Connected" />
+        </template>
+        <template v-else>
+          <UBadge color="red" variant="outline" label="Disconnected" />
+        </template>
+      </template>
       <template #actions-data="{ row }">
         <UDropdown class="w-8" :items="items(row)">
           <UButton

@@ -1,12 +1,15 @@
 import { expect, test } from "vitest";
-import { DigitalOcean } from "../../src/providers";
+import { RegistryClient, Provider, RegistryOptions } from "../../src";
 
 const token = process.env.DIGITALOCEAN_ACCESS_TOKEN;
 if (!token) {
   throw new Error(`Invalid digitalOcean access token`);
 }
-
-const client = new DigitalOcean("unload", token);
+const clientOptions: RegistryOptions = {
+  name: "unload",
+  token,
+};
+const client = RegistryClient.create(Provider.digitalOcean, clientOptions);
 
 test("ping registry", async () => {
   const ping = await client.ping();
@@ -14,7 +17,15 @@ test("ping registry", async () => {
 });
 
 test("get all repositories", async () => {
-  const expectedRepositories = ["alpine"];
+  const expectedRepositories = [
+    {
+      name: "alpine",
+      manifest_count: 3,
+      tag_count: 3,
+      last_tag: "3.18.3",
+      updated_at: 1696630784000,
+    },
+  ];
   const repositories = await client.getRepositories();
   expect(repositories).toStrictEqual(expectedRepositories);
 });

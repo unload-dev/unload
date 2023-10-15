@@ -12,12 +12,14 @@ import { defineStore } from "pinia";
 export const useRegistryStore = defineStore("registryStore", () => {
   const registries = ref<Registries>();
   const types = ref<RegistryTypes>();
+  const isLoading = ref<boolean>(true);
 
   const { $client } = useNuxtApp();
 
   async function load() {
     const { data } = await $client.registry.getAll.useQuery();
     registries.value = data.value;
+    isLoading.value = false;
   }
 
   async function loadTypes() {
@@ -30,12 +32,12 @@ export const useRegistryStore = defineStore("registryStore", () => {
     await load();
   }
 
-  async function remove(name: string): Promise<void> {
-    await $client.registry.delete.mutate({ name });
+  async function remove(id: string): Promise<void> {
+    await $client.registry.delete.mutate({ id });
     await load();
   }
 
   load();
   loadTypes();
-  return { registries, types, remove, add };
+  return { registries, isLoading, types, remove, add };
 });

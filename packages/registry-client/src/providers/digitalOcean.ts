@@ -1,18 +1,18 @@
 import * as httpSecure from "node:https";
 import { default as axios, Axios, AxiosResponse } from "axios";
-import { RegistryProvider } from "./registryProvider";
+import { RegistryProvider, Repository } from "./registryProvider";
 
-export class DigitalOcean implements RegistryProvider {
+export class DigitalOceanProvider implements RegistryProvider {
   public readonly name: string = "digitalocean";
 
   private readonly url: string = "api.digitalocean.com";
   private readonly https: boolean = true;
   private readonly skipTlsVerify: boolean = false;
 
-  public registryName: string;
+  public namespace: string;
   private apiClient: Axios;
 
-  constructor(registryName: string, token: string) {
+  constructor(namespace: string, token: string) {
     if (
       !token.startsWith("dop_v1_") &&
       !token.startsWith("doo_v1_") &&
@@ -23,7 +23,7 @@ export class DigitalOcean implements RegistryProvider {
       );
     }
 
-    this.registryName = registryName;
+    this.namespace = namespace;
 
     const scheme = this.https ? "https" : "http";
     const headers = { Authorization: `Bearer ${token}` };
@@ -57,20 +57,26 @@ export class DigitalOcean implements RegistryProvider {
       const { data } = await this.sendRequest({
         url: "/v2/registry",
       });
-      console.log(data);
       return true;
     } catch (error) {
-      console.log(error);
       return false;
     }
   }
 
-  async getRepositories(): Promise<string[]> {
+  async getRepositories(): Promise<Repository[]> {
     const { data } = await this.sendRequest({
-      url: `/v2/registry/${this.registryName}/repositoriesV2`,
+      url: `/v2/registry/${this.namespace}/repositoriesV2`,
     });
 
-    const repositories = data.repositories.map((repo) => repo.name);
+    const repositories = data.repositories.map((repo) => {
+      return {
+        name: repo.name,
+        manifest_count: repo.manifest_count,
+        tag_count: repo.tag_count,
+        last_tag: repo.latest_manifest.tags[0],
+        updated_at: Date.parse(repo.latest_manifest.updated_at),
+      };
+    });
     return repositories;
   }
 
@@ -78,10 +84,8 @@ export class DigitalOcean implements RegistryProvider {
     const escapedRepositoryName = encodeURIComponent(repository);
 
     const { data } = await this.sendRequest({
-      url: `/v2/registry/${this.registryName}/repositories/${escapedRepositoryName}/tags`,
+      url: `/v2/registry/${this.namespace}/repositories/${escapedRepositoryName}/tags`,
     });
-
-    console.log(data);
 
     const tags = data.tags.map((tag) => tag.tag);
 

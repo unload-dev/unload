@@ -1,40 +1,45 @@
+import { Repository } from "./types";
+
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
-import RegistryClient from "@unload/registry-client";
+import {
+  RegistryClient,
+  Provider,
+  RegistryOptions,
+} from "@unload/registry-client";
 
-const options = {
-  registry: "localhost:5001",
-  https: true,
-  insecure: true,
-  auth: {
-    username: "testuser",
-    password: "testpassword",
-  },
-};
+export const repositoryRouter = router({
+  getAll: protectedProcedure.query(async ({ ctx }): Promise<Repository[]> => {
+    const registries = await ctx.prisma.registry.findMany({
+      where: { userId: ctx.session.user.id },
+      include: {
+        type: true,
+        credentials: true,
+      },
+    });
 
-export const registryRouter = router({
-  getByName: protectedProcedure
-    .input(
-      z.object({
-        name: z.string(),
-      })
-    )
-    .query(async ({ ctx }) => {
-      const registries = await ctx.prisma.registry.findMany({
-        where: { userId: ctx.session.user.id },
-        include: {
-          type: true,
-        },
-      });
-
-      const values = registries.map((reg) => {
-        return {
-          name: reg.name,
-          type: reg.type.name,
-          repositories: reg.name.length,
+    const response = [];
+    for (const registry of registries) {
+      try {
+        const options: RegistryOptions = {
+          name: registry.namespace as string,
+          token: registry.credentials.token as string,
         };
-      });
+        const provider = RegistryClient.create(Provider.digitalOcean, options);
+        const repositories = await provider.getRepositories();
 
-      return values;
-    }),
+        const repoWithRegistry = repositories.map((repo): Repository => {
+          return {
+            ...repo,
+            registry: registry.name,
+          };
+        });
+        response.push(...repoWithRegistry);
+      } catch (error) {
+        console.error(`Can't access registry: ${registry.name}`);
+      }
+    }
+
+    return response;
+  }),
 });
