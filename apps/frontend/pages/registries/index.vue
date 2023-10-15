@@ -32,6 +32,10 @@ const columns = [
     key: "repositories",
     label: "Repositories",
   },
+  {
+    key: "connected",
+    label: "Status",
+  },
   { key: "actions", class: "w-12" },
 ];
 </script>
@@ -65,6 +69,14 @@ const columns = [
         label: 'No registries.',
       }"
     >
+      <template #connected-data="{ row }">
+        <template v-if="row.connected">
+          <UBadge color="green" variant="outline" label="Connected" />
+        </template>
+        <template v-else>
+          <UBadge color="red" variant="outline" label="Disconnected" />
+        </template>
+      </template>
       <template #actions-data="{ row }">
         <UDropdown class="w-8" :items="items(row)">
           <UButton

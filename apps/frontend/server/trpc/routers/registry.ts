@@ -2,6 +2,11 @@ import { Registry } from "./types";
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { Registry as PrismaRegistry } from "@prisma/client";
+import {
+  RegistryClient,
+  Provider,
+  RegistryOptions,
+} from "@unload/registry-client";
 
 export const registryRouter = router({
   getAll: protectedProcedure.query(async ({ ctx }): Promise<Registry[]> => {
@@ -9,18 +14,32 @@ export const registryRouter = router({
       where: { userId: ctx.session.user.id },
       include: {
         type: true,
+        credentials: true,
       },
     });
 
-    const values = registries.map((reg: PrismaRegistry) => {
-      return {
-        name: reg.name,
-        type: reg.type.name,
-        repositories: reg.name.length,
-      };
-    });
+    const checkedRegistries: Registry[] = [];
 
-    return values;
+    for (const registry of registries) {
+      let isConnected = false;
+      try {
+        const options: RegistryOptions = {
+          name: registry.namespace as string,
+          token: registry.credentials.token as string,
+        };
+        const provider = RegistryClient.create(Provider.digitalOcean, options);
+        isConnected = await provider.ping();
+      } catch (error) {}
+      checkedRegistries.push({
+        id: registry.id,
+        name: registry.name,
+        type: registry.type.name,
+        repositories: registry.name.length,
+        connected: isConnected,
+      });
+    }
+
+    return checkedRegistries;
   }),
   add: protectedProcedure
     .input(

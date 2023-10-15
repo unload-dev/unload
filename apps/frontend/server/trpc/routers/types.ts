@@ -4,6 +4,7 @@ export interface Registry {
   name: string;
   type: string;
   repositories: number;
+  connected: boolean;
 }
 
 export interface Repository extends ClientRepository {
