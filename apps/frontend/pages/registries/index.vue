@@ -6,7 +6,7 @@ import { useRegistryStore } from "~/store/registryStore";
 import { storeToRefs } from "pinia";
 
 const store = useRegistryStore();
-const { registries } = storeToRefs(store);
+const { registries, isLoading } = storeToRefs(store);
 
 const items = (row) => [
   [
@@ -54,6 +54,11 @@ const columns = [
       :rows="registries"
       :ui="{
         wrapper: 'border rounded-md border-gray-200 dark:border-gray-700',
+      }"
+      :loading="isLoading"
+      :loading-state="{
+        icon: 'i-heroicons-arrow-path-20-solid',
+        label: 'Loading...',
       }"
       :empty-state="{
         icon: 'i-heroicons-circle-stack-20-solid',
