@@ -18,7 +18,7 @@ export const useRegistryStore = defineStore("registryStore", () => {
 
   async function load() {
     const { data } = await $client.registry.getAll.useQuery();
-    registries.value = data.value;
+    registries.value = data.value || [];
     isLoading.value = false;
   }
 

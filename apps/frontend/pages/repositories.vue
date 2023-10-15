@@ -8,7 +8,7 @@ const isLoading = ref(true);
 const { $client } = useNuxtApp();
 
 $client.repository.getAll.useQuery().then(({ data }) => {
-  repositories.value = data.value;
+  repositories.value = data.value || [];
   isLoading.value = false;
 });
 
