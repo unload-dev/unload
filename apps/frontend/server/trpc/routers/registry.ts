@@ -81,13 +81,13 @@ export const registryRouter = router({
   delete: protectedProcedure
     .input(
       z.object({
-        name: z.string(),
+        id: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       const registry = await ctx.prisma.registry.delete({
         where: {
-          name: input.name,
+          id: input.id,
         },
       });
 

@@ -4,18 +4,23 @@ definePageMeta({
 });
 import { useRegistryStore } from "~/store/registryStore";
 import { storeToRefs } from "pinia";
+import { Registry } from "~/server/trpc/routers/types";
 
 const store = useRegistryStore();
 const { registries, isLoading } = storeToRefs(store);
 
-const items = (row) => [
+const items = (row: Registry) => [
   [
     {
       label: "Edit",
       icon: "i-heroicons-pencil-square-20-solid",
-      click: () => console.log("Edit", row.id),
+      disabled: true,
     },
-    { label: "Delete", icon: "i-heroicons-trash-20-solid" },
+    {
+      label: "Delete",
+      icon: "i-heroicons-trash-20-solid",
+      click: () => store.remove(row.id),
+    },
   ],
 ];
 
