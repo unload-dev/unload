@@ -19,6 +19,7 @@ const current = computed(
 const schema = z.object({
   registry: z.object({
     name: z.string().min(1, "Required"),
+    namespace: z.string().min(1, "Required"),
     type: z.string().min(1, "Required"),
     url: z.string().url("Please enter a valid url"),
     skipTlsVerify: z.boolean(),
@@ -26,6 +27,7 @@ const schema = z.object({
   credentials: z.object({
     username: z.string(),
     password: z.string(),
+    token: z.string(),
   }),
 });
 
@@ -34,11 +36,12 @@ type Schema = z.output<typeof schema>;
 const state = ref({
   registry: {
     name: "",
+    namespace: "",
     type: "",
-    url: "",
+    url: "https://localhost",
     skipTlsVerify: false,
   },
-  credentials: { username: undefined, password: undefined },
+  credentials: { username: "", password: "", token: "" },
 });
 
 async function addRegistry(values) {
@@ -49,6 +52,7 @@ async function addRegistry(values) {
     console.error(error);
   }
 }
+
 async function submit(event: FormSubmitEvent<Schema>) {
   // Do something with data
   loading.value = true;
@@ -90,17 +94,25 @@ async function submit(event: FormSubmitEvent<Schema>) {
         </USelectMenu>
       </UFormGroup>
 
-      <UFormGroup required label="Registry URL" name="registry.url">
-        <UInput v-model="state.registry.url" />
+      <UFormGroup required label="Registry Name" name="registry.namespace">
+        <UInput v-model="state.registry.namespace" />
       </UFormGroup>
 
+      <!-- <UFormGroup required label="Registry URL" name="registry.url">
+        <UInput v-model="state.registry.url" />
+      </UFormGroup> -->
+
       <h3 class="mt-4">Registry credentials</h3>
-      <UFormGroup label="Username" name="credentials.username">
+      <!-- <UFormGroup label="Username" name="credentials.username">
         <UInput v-model="state.credentials.username" />
       </UFormGroup>
 
       <UFormGroup label="Password" name="credentials.password">
         <UInput v-model="state.credentials.password" type="password" />
+      </UFormGroup> -->
+
+      <UFormGroup label="Token" name="credentials.token">
+        <UInput v-model="state.credentials.token" type="token" />
       </UFormGroup>
 
       <UButton :loading="loading" loading-icon="" type="submit">

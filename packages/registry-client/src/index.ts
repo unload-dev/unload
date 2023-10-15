@@ -1,72 +1,25 @@
-const httpSecure = require("https");
-const { default: axios } = require("axios");
+import {
+  Provider,
+  Repository,
+  RegistryProvider,
+  DigitalOceanProvider,
+} from "./providers";
 
-module.exports = class DockerRegistryClient {
-  #http;
+export { Provider, Repository };
 
-  constructor({
-    repository = "hub.docker.com",
-    https = true,
-    insecure = false,
-    auth = undefined,
-  }) {
-    const scheme = https ? "https" : "http";
-    this.#http = axios.create({
-      baseURL: `${scheme}://${repository}`,
-      httpsAgent: new httpSecure.Agent({
-        rejectUnauthorized: !insecure,
-      }),
-      auth,
-    });
-  }
+export interface RegistryOptions {
+  name: string;
+  token: string;
+}
 
-  async sendRequest(request) {
-    try {
-      const response = await this.#http({
-        ...request,
-      });
-      return response;
-    } catch (error) {
-      throw error;
+export class RegistryClient {
+  public static create(
+    provider: Provider,
+    options: RegistryOptions
+  ): RegistryProvider {
+    switch (provider) {
+      case Provider.digitalOcean:
+        return new DigitalOceanProvider(options.name, options.token);
     }
   }
-
-  async ping() {
-    const request = {
-      url: `/v2/`,
-    };
-    const response = await this.sendRequest(request);
-    return response;
-  }
-
-  async getTags(repository) {
-    const request = {
-      url: `/v2/${repository}/tags/list`,
-    };
-    const { data } = await this.sendRequest(request);
-    return data.tags;
-  }
-
-  async getManifest(repository, reference) {
-    const request = {
-      url: `/v2/${repository}/manifests/${reference}`,
-      headers: {
-        Accept: "application/vnd.docker.distribution.manifest.v2+json",
-      },
-    };
-    const { data, headers } = await this.sendRequest(request);
-    return { ...data, digest: headers["docker-content-digest"] };
-  }
-
-  async deleteManifest(repository, reference) {
-    const request = {
-      method: "DELETE",
-      url: `/v2/${repository}/manifests/${reference}`,
-      headers: {
-        Accept: "application/vnd.docker.distribution.manifest.v2+json",
-      },
-    };
-    const response = await this.sendRequest(request);
-    return response;
-  }
-};
+}
