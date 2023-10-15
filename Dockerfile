@@ -11,7 +11,11 @@ RUN npm ci
 
 # Copy the entire workspace into the Docker image
 
-COPY . . 
+COPY . .
+
+WORKDIR /workspace/packages/registry-client
+RUN npm ci
+RUN npm run build 
 
 # Set the working directory in the container
 WORKDIR /workspace/apps/frontend
