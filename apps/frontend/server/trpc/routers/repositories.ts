@@ -18,21 +18,28 @@ export const repositoryRouter = router({
       },
     });
 
-    const reg = registries.filter((r) => r.name === "Unload - Production")[0];
-    const options: RegistryOptions = {
-      name: reg.namespace as string,
-      token: reg.credentials.token as string,
-    };
-    const provider = RegistryClient.create(Provider.digitalOcean, options);
-    const repositories = await provider.getRepositories();
+    const response = [];
+    for (const registry of registries) {
+      try {
+        const options: RegistryOptions = {
+          name: registry.namespace as string,
+          token: registry.credentials.token as string,
+        };
+        const provider = RegistryClient.create(Provider.digitalOcean, options);
+        const repositories = await provider.getRepositories();
 
-    const result = repositories.map((repo): Repository => {
-      return {
-        ...repo,
-        registry: reg.name,
-      };
-    });
+        const repoWithRegistry = repositories.map((repo): Repository => {
+          return {
+            ...repo,
+            registry: registry.name,
+          };
+        });
+        response.push(...repoWithRegistry);
+      } catch (error) {
+        console.error(`Can't access registry: ${registry.name}`);
+      }
+    }
 
-    return result;
+    return response;
   }),
 });
