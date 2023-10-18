@@ -27,7 +27,7 @@ const links = [
   <UVerticalNavigation
     :links="links"
     :ui="{
-      size: 'text-sm',
+      size: 'text-md md:text-sm',
       icon: {
         base: 'h-[18px] w-[18px]',
         active: 'text-primary dark:text-primary',

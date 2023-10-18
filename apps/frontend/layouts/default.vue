@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex min-w-screen min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+    class="flex flex-col md:flex-row min-w-screen min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
   >
     <AppSidebar />
 
