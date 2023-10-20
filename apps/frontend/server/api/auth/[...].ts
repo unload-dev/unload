@@ -20,10 +20,10 @@ declare module "next-auth" {
 export default NuxtAuthHandler({
   debug: false,
   secret: process.env.AUTH_SECRET,
-  //   pages: {
-  //     // Change the default behavior to use `/login` as the path for the sign-in page
-  //     signIn: "/login",
-  //   },
+  pages: {
+    // Change the default behavior to use `/login` as the path for the sign-in page
+    signIn: "/auth/login",
+  },
   adapter: PrismaAdapter(prisma),
   providers: [
     // @ts-expect-error You need to use .default here for it to work during SSR. May be fixed via Vite at some point

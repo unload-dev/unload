@@ -11,10 +11,10 @@ const isOpen = ref(false);
   >
     <UButton
       square
-      icon="i-heroicons-cube"
+      icon="i-heroicons-bars-3"
       size="lg"
       variant="ghost"
-      color="grey"
+      color="gray"
       class="p-4 absolute"
       :ui="{ icon: { size: { lg: 'h-8 w-8' } } }"
       @click="isOpen = true"

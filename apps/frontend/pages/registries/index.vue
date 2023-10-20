@@ -4,7 +4,7 @@ definePageMeta({
 });
 import { useRegistryStore } from "~/store/registryStore";
 import { storeToRefs } from "pinia";
-import { Registry } from "~/server/trpc/routers/types";
+import type { Registry } from "~/server/trpc/routers/types";
 
 const store = useRegistryStore();
 const { registries, isLoading } = storeToRefs(store);

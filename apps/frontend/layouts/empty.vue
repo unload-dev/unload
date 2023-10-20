@@ -1,9 +1,7 @@
 <template>
   <div
-    class="flex flex-col md:flex-row min-w-screen min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+    class="flex min-w-screen min-h-screen flex-col justify-center py-20 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
   >
-    <AppSidebar />
-
     <UContainer
       :ui="{
         base: 'w-full',
