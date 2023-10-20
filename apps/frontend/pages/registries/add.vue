@@ -68,7 +68,7 @@ async function submit(event: FormSubmitEvent<Schema>) {
 <template>
   <div>
     <div class="my-6">
-      <NuxtLink :to="{ name: 'registries' }">&LeftArrow; Back</NuxtLink>
+      <NuxtLink :to="{ name: 'registries-list' }">&LeftArrow; Back</NuxtLink>
     </div>
 
     <UForm

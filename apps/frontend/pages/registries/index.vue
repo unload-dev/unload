@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   title: "Registries",
+  name: "registries-list",
 });
 import { useRegistryStore } from "~/store/registryStore";
 import { storeToRefs } from "pinia";
