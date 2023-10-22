@@ -4,14 +4,14 @@ import type { AppRouter } from "~/server/trpc/routers";
 type RouterOutput = inferRouterOutputs<AppRouter>;
 type RouterInput = inferRouterInputs<AppRouter>;
 type Registries = RouterOutput["registry"]["getAll"] | null;
-type RegistryTypes = RouterOutput["registry"]["getTypes"] | null;
+type RegistryTypes = RouterOutput["registry"]["getTypes"];
 type RegistryCreate = RouterInput["registry"]["add"];
 
 import { defineStore } from "pinia";
 
 export const useRegistryStore = defineStore("registryStore", () => {
-  const registries = ref<Registries>();
-  const types = ref<RegistryTypes>();
+  const registries = ref<Registries>([]);
+  const types = ref<RegistryTypes>([]);
   const isLoading = ref<boolean>(true);
 
   const { $client } = useNuxtApp();

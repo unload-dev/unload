@@ -1,18 +1,29 @@
 import { PrismaClient } from "@prisma/client";
+import type { RegistryType } from "@prisma/client";
+import { Provider } from "@unload/registry-client";
 const prisma = new PrismaClient();
 
-function upsertRegistryType(name: string) {
+function upsertRegistryType(registryType: RegistryType) {
   return prisma.registryType.upsert({
-    where: { name },
+    where: { id: registryType.id },
     update: {},
     create: {
-      name,
+      ...registryType,
     },
   });
 }
 
 async function main() {
-  const registryTypes = ["GitHub", "DigitalOcean", "Docker Registry"];
+  const registryTypes: RegistryType[] = [
+    { id: Provider.dockerHub, name: "DockerHub", enabled: false },
+    { id: Provider.github, name: "GitHub", enabled: false },
+    { id: Provider.digitalOcean, name: "DigitalOcean", enabled: true },
+    {
+      id: Provider.dockerRegistryV2,
+      name: "Docker Registry V2",
+      enabled: true,
+    },
+  ];
 
   for (const registryType of registryTypes) {
     await upsertRegistryType(registryType);

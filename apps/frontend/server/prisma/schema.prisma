@@ -38,8 +38,9 @@ model RegistryCredentials {
 }
 
 model RegistryType {
-  id   String @id @default(cuid())
-  name String @unique
+  id      String  @id @default(cuid())
+  name    String  @unique
+  enabled Boolean @default(false)
 
   Registry Registry[]
 }
