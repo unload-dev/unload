@@ -49,7 +49,7 @@ const columns = [
 <template>
   <div>
     <header class="my-6 flex items-center justify-between">
-      <h1 class="py-1 text-xl font-medium">Registries</h1>
+      <h1>Registries</h1>
       <UButton
         icon="i-heroicons-plus-20-solid"
         label="Connect Registry"

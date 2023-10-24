@@ -39,6 +39,7 @@
     "@vueuse/core": "^10.5.0",
     "@vueuse/nuxt": "^10.5.0",
     "nuxt": "^3.8.0",
-    "prettier": "^3.0.3"
+    "prettier": "^3.0.3",
+    "prettier-plugin-tailwindcss": "^0.5.6"
   }
 }

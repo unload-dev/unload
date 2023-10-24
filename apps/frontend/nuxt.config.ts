@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   modules: ["@sidebase/nuxt-auth", "@pinia/nuxt", "@nuxt/ui", "@vueuse/nuxt"],
   devtools: { enabled: true },
+  css: ["~/assets/css/main.css"],
   ui: {
     icons: ["heroicons", "simple-icons"],
   },
