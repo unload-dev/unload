@@ -21,7 +21,7 @@ async function main() {
     {
       id: Provider.dockerRegistryV2,
       name: "Docker Registry V2",
-      enabled: true,
+      enabled: false,
     },
   ];
 

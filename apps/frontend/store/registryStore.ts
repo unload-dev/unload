@@ -5,7 +5,7 @@ type RouterOutput = inferRouterOutputs<AppRouter>;
 type RouterInput = inferRouterInputs<AppRouter>;
 type Registries = RouterOutput["registry"]["getAll"] | null;
 type RegistryTypes = RouterOutput["registry"]["getTypes"];
-type RegistryCreate = RouterInput["registry"]["add"];
+export type RegistryCreate = RouterInput["registry"]["add"];
 
 import { defineStore } from "pinia";
 
