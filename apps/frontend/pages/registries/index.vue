@@ -1,10 +1,11 @@
 <script setup lang="ts">
 definePageMeta({
   title: "Registries",
+  name: "registries-list",
 });
 import { useRegistryStore } from "~/store/registryStore";
 import { storeToRefs } from "pinia";
-import { Registry } from "~/server/trpc/routers/types";
+import type { Registry } from "~/server/trpc/routers/types";
 
 const store = useRegistryStore();
 const { registries, isLoading } = storeToRefs(store);
@@ -48,7 +49,7 @@ const columns = [
 <template>
   <div>
     <header class="my-6 flex items-center justify-between">
-      <h1 class="py-1 text-xl font-medium">Registries</h1>
+      <h1>Registries</h1>
       <UButton
         icon="i-heroicons-plus-20-solid"
         label="Connect Registry"

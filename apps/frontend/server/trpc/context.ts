@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { inferAsyncReturnType } from "@trpc/server";
+import type { inferAsyncReturnType } from "@trpc/server";
 import { getServerSession } from "#auth";
 import type { H3Event } from "h3";
 

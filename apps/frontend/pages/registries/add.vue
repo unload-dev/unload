@@ -5,16 +5,11 @@ definePageMeta({
 
 import { z } from "zod";
 import type { FormSubmitEvent } from "@nuxt/ui/dist/runtime/types";
+import type { RegistryCreate } from "~/store/registryStore";
 import { useRegistryStore } from "~/store/registryStore";
 
 const registryStore = useRegistryStore();
 const loading = ref<boolean>(false);
-const current = computed(
-  () =>
-    registryStore.types.find(
-      (type) => type.id === state.value.registry.type
-    ) ?? { name: "Select a provider" }
-);
 
 const schema = z.object({
   registry: z.object({
@@ -27,27 +22,27 @@ const schema = z.object({
   credentials: z.object({
     username: z.string(),
     password: z.string(),
-    token: z.string(),
+    token: z.string().min(1, "Required"),
   }),
 });
 
 type Schema = z.output<typeof schema>;
 
-const state = ref({
+const state = ref<RegistryCreate>({
   registry: {
     name: "",
     namespace: "",
-    type: "",
+    type: registryStore.types?.[0]?.id ?? "",
     url: "https://localhost",
     skipTlsVerify: false,
   },
   credentials: { username: "", password: "", token: "" },
 });
 
-async function addRegistry(values) {
+async function addRegistry(values: RegistryCreate) {
   try {
     await registryStore.add(values);
-    await navigateTo({ name: "registries" });
+    await navigateTo({ name: "registries-list" });
   } catch (error) {
     console.error(error);
   }
@@ -68,57 +63,78 @@ async function submit(event: FormSubmitEvent<Schema>) {
 <template>
   <div>
     <div class="my-6">
-      <NuxtLink :to="{ name: 'registries' }">&LeftArrow; Back</NuxtLink>
+      <NuxtLink :to="{ name: 'registries-list' }">&LeftArrow; Back</NuxtLink>
     </div>
-
     <UForm
       :schema="schema"
       :state="state"
       @submit="submit"
-      class="flex flex-col items-start gap-4 mx-auto w-full max-w-xs"
+      class="mx-auto flex w-full max-w-2xl flex-col items-start gap-4"
     >
-      <h2>Connect your registry</h2>
-      <UFormGroup required label="Name" name="registry.name">
+      <h1 class="my-6">Connect your registry</h1>
+
+      <UFormGroup
+        class="w-full"
+        label="Select a registry provider"
+        name="registry.type"
+      >
+        <template #label>
+          <h3>Select a registry provider</h3>
+        </template>
+        <div class="grid w-full grid-cols-2 gap-2">
+          <template v-for="registryType of registryStore.types">
+            <UButton
+              v-if="registryType.enabled"
+              :class="{
+                'ring-1 ring-inset ring-current':
+                  state.registry.type === registryType.id,
+              }"
+              size="lg"
+              variant="soft"
+              block
+              :label="registryType.name"
+              @click="state.registry.type = registryType.id"
+            />
+            <UButton
+              v-else
+              size="lg"
+              variant="soft"
+              block
+              disabled
+              :label="registryType.name"
+            />
+          </template>
+        </div>
+      </UFormGroup>
+
+      <UFormGroup class="w-full" required label="Name" name="registry.name">
         <UInput v-model="state.registry.name" />
       </UFormGroup>
 
-      <UFormGroup required label="Registry provider" name="registry.type">
-        <USelectMenu
-          v-model="state.registry.type"
-          :options="registryStore.types"
-          placeholder="Select registry provider"
-          value-attribute="id"
-          option-attribute="name"
-        >
-          <template #label> {{ current.name }} </template>
-        </USelectMenu>
-      </UFormGroup>
-
-      <UFormGroup required label="Registry Name" name="registry.namespace">
+      <UFormGroup
+        class="w-full"
+        required
+        label="DigitalOcean's registry name"
+        name="registry.namespace"
+      >
         <UInput v-model="state.registry.namespace" />
       </UFormGroup>
 
-      <!-- <UFormGroup required label="Registry URL" name="registry.url">
-        <UInput v-model="state.registry.url" />
-      </UFormGroup> -->
-
       <h3 class="mt-4">Registry credentials</h3>
-      <!-- <UFormGroup label="Username" name="credentials.username">
-        <UInput v-model="state.credentials.username" />
-      </UFormGroup>
 
-      <UFormGroup label="Password" name="credentials.password">
-        <UInput v-model="state.credentials.password" type="password" />
-      </UFormGroup> -->
-
-      <UFormGroup label="Token" name="credentials.token">
-        <UInput v-model="state.credentials.token" type="token" />
+      <UFormGroup
+        class="w-full"
+        required
+        label="Personal access token"
+        name="credentials.token"
+      >
+        <UInput v-model="state.credentials.token" type="password" />
       </UFormGroup>
 
       <UButton :loading="loading" loading-icon="" type="submit">
         <template #trailing v-if="loading">
           <svg
-            class="animate-spin h-4 w-4 text-white"
+            class="h-4 w-4 animate-spin text-white"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"

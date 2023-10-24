@@ -1,12 +1,9 @@
-import { Registry } from "./types";
+import type { Registry } from "./types";
+import type { RegistryOptions } from "@unload/registry-client";
+
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
-import { Registry as PrismaRegistry } from "@prisma/client";
-import {
-  RegistryClient,
-  Provider,
-  RegistryOptions,
-} from "@unload/registry-client";
+import { RegistryClient, Provider } from "@unload/registry-client";
 
 export const registryRouter = router({
   getAll: protectedProcedure.query(async ({ ctx }): Promise<Registry[]> => {
@@ -98,6 +95,15 @@ export const registryRouter = router({
       });
     }),
   getTypes: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.registryType.findMany();
+    return ctx.prisma.registryType.findMany({
+      orderBy: [
+        {
+          enabled: "desc",
+        },
+        {
+          name: "asc",
+        },
+      ],
+    });
   }),
 });
