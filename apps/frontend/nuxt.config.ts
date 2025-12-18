@@ -7,7 +7,7 @@ export default defineNuxtConfig({
     icons: ["heroicons", "simple-icons"],
   },
   auth: {
-    enableGlobalAppMiddleware: true,
+    enableGlobalAppMiddleware: false,
   },
   build: {
     transpile: ["trpc-nuxt"],
